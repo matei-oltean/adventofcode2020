@@ -17,3 +17,4 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory("day01")
+add_subdirectory("day04")
