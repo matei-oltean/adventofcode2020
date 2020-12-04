@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <regex>
+#include <algorithm>
 
 using namespace std;
 
@@ -22,14 +23,8 @@ uint64_t sol1() {
     unordered_set<string> fields;
     while (getline(cin, line)) {
         if (line.empty()) {
-            auto valid = true;
-            for (auto key: mandatory_keys) {
-                if (!fields.count(key.first)) {
-                    valid = false;
-                    break;
-                }
-            }
-            if (valid) {
+            if (all_of(mandatory_keys.begin(), mandatory_keys.end(),
+                [&fields](auto key) { return fields.count(key.first); })) {
                 ++result;
             }
             fields.clear();
@@ -54,14 +49,10 @@ uint64_t sol2() {
     unordered_map<string, string> fields;
     while (getline(cin, line)) {
         if (line.empty()) {
-            auto valid = true;
-            for (auto key: mandatory_keys) {
-                if (!fields.count(key.first) || !regex_match(fields.at(key.first), key.second)) {
-                    valid = false;
-                    break;
-                }
+            if (all_of(mandatory_keys.begin(), mandatory_keys.end(),
+                [&fields](auto key) { return fields.count(key.first) && regex_match(fields.at(key.first), key.second); })) {
+                ++result;
             }
-            result += valid;
             fields.clear();
             continue;
         }
