@@ -2,62 +2,18 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
-#include <functional>
 #include <regex>
 
 using namespace std;
 
-const unordered_map<string, function<bool(string)> > mandatory_keys {
-    { "byr", [](auto a) {
-        regex r ("^[1-2][0-9]{3}$");
-        if (!regex_match(a, r))
-            return false;
-        auto num = stoull(a);
-        return (1920 <= num) && (num <= 2002);
-     }
-    },
-    { "iyr", [](auto a) {
-        regex r ("^[1-2][0-9]{3}$");
-        if (!regex_match(a, r))
-            return false;
-        auto num = stoull(a);
-        return (2010 <= num) && (num <= 2020);
-     }
-    },
-    { "eyr", [](auto a) {
-        regex r ("^[1-2][0-9]{3}$");
-        if (!regex_match(a, r))
-            return false;
-        auto num = stoull(a);
-        return (2020 <= num) && (num <= 2030);
-     }
-    },
-    { "hgt", [](auto a) {
-        regex r ("^[1-9][0-9]*(cm|in)$");
-        if (!regex_match(a, r))
-            return false;
-        auto h = a.substr(0, a.length() - 2);
-        auto height = stoull(h);
-        if (a.at(a.length() - 1) == 'n')
-            return (59 <= height) && (height <= 76);
-        return (150 <= height) && (height <= 193);
-     }
-    },
-    { "hcl", [](auto a) {
-        regex r ("^#[0-9a-f]{6}$");
-        return regex_match(a, r);
-     }
-    },
-    { "ecl", [](auto a) {
-        regex r ("^(amb|blu|brn|gry|grn|hzl|oth)$");
-        return regex_match(a, r);
-     }
-    },
-    { "pid", [](auto a) {
-        regex r ("^[0-9]{9}$");
-        return regex_match(a, r);
-     }
-    }
+const unordered_map<string, regex> mandatory_keys {
+    { "byr", regex("^19[2-9][0-9]|200[0-2]$") },
+    { "iyr", regex("^201[0-9]|2020$") },
+    { "eyr", regex("^202[0-9]|2030$") },
+    { "hgt", regex("^((1[5-8][0-9]|19[0-3])cm)|((59|6[0-9]|7[0-6])in)$") },
+    { "hcl", regex("^#[0-9a-f]{6}$") },
+    { "ecl", regex("^(amb|blu|brn|gry|grn|hzl|oth)$") },
+    { "pid", regex("^[0-9]{9}$") },
 };
 
 uint64_t sol1() {
@@ -100,7 +56,7 @@ uint64_t sol2() {
         if (line.empty()) {
             auto valid = true;
             for (auto key: mandatory_keys) {
-                if (!fields.count(key.first) || !key.second(fields.at(key.first))) {
+                if (!fields.count(key.first) || !regex_match(fields.at(key.first), key.second)) {
                     valid = false;
                     break;
                 }
