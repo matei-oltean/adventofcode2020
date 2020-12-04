@@ -15,6 +15,7 @@ uint64_t sol1() {
         }
         d.emplace(num);
     }
+    return 0;
 }
 
 uint64_t sol2() {
@@ -32,6 +33,7 @@ uint64_t sol2() {
         }
         num.emplace(a);
     }
+    return 0;
 }
 
 int main() {
