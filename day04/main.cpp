@@ -4,6 +4,7 @@
 #include <iostream>
 #include <regex>
 #include <algorithm>
+#include <./utils.h>
 
 using namespace std;
 
@@ -30,15 +31,14 @@ uint64_t sol1() {
             fields.clear();
             continue;
         }
-        size_t start = 0, end = 0;
-        while (end != string::npos) {
-            end = line.find_first_of(" ", start);
-            auto key_value = line.substr(start, end - start);
-            auto semi_colon_pos = key_value.find_first_of(":");
-            auto key = key_value.substr(0, semi_colon_pos);
-            fields.emplace(key);
-            start = end + 1;
-        }
+        auto key_values = split(line, ' ');
+        for_each(key_values.begin(), key_values.end(),
+            [&fields](auto kv) {
+                auto semi_colon_pos = kv.find_first_of(':');
+                auto key = kv.substr(0, semi_colon_pos);
+                fields.emplace(key);
+            }
+        );
     }
     return result;
 }
@@ -56,16 +56,15 @@ uint64_t sol2() {
             fields.clear();
             continue;
         }
-        size_t start = 0, end = 0;
-        while (end != string::npos) {
-            end = line.find_first_of(" ", start);
-            auto key_value = line.substr(start, end - start);
-            auto semi_colon_pos = key_value.find_first_of(":");
-            auto key = key_value.substr(0, semi_colon_pos);
-            auto value = key_value.substr(semi_colon_pos + 1, string::npos);
-            fields.emplace(key, value);
-            start = end + 1;
-        }
+        auto key_values = split(line, ' ');
+        for_each(key_values.begin(), key_values.end(),
+            [&fields](auto kv) {
+                auto semi_colon_pos = kv.find_first_of(':');
+                auto key = kv.substr(0, semi_colon_pos);
+                auto value = kv.substr(semi_colon_pos + 1, string::npos);
+                fields.emplace(key, value);
+            }
+        );
     }
     return result;
 }
