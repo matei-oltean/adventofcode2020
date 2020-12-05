@@ -20,3 +20,4 @@ include_directories("utils/")
 
 add_subdirectory("day01")
 add_subdirectory("day04")
+add_subdirectory("day05")
