@@ -1,5 +1,5 @@
 #include <string>
-#include <set>
+#include <unordered_set>
 #include <iostream>
 #include <algorithm>
 #include <./utils.h>
@@ -41,7 +41,7 @@ uint64_t sol1() {
 uint64_t sol2() {
     string line;
     int minID = ID({ 127, 7 }), mid;
-    set<pair<int, int>> seats;
+    unordered_set<int> seats;
     while (getline(cin, line)) {
         int low = 0, high = 127;
         for (int i = 0; i < 7; ++i) {
@@ -61,8 +61,9 @@ uint64_t sol2() {
                 left = mid + 1;
             }
         }
-        minID = min(minID, ID({ low, left }));
-        seats.emplace(low, left);
+        int id = ID({ low, left });
+        minID = min(minID, id);
+        seats.emplace(id);
     }
     for (int i = 0; i < 127; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -70,7 +71,7 @@ uint64_t sol2() {
             if (id <= minID) {
                 break;
             }
-            if (!seats.count({ i, j })) {
+            if (!seats.count(id)) {
                 return id;
             }
         }
