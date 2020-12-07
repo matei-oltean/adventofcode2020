@@ -35,4 +35,4 @@
 builds/*
 
 # VSCode settings
-.vscode/*
+.vscode/settings.json
