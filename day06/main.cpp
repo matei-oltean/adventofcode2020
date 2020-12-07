@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void set_from_string(unordered_set<char>& set, const string& str) {
+void add_to_set(unordered_set<char>& set, const string& str) {
     for_each(str.begin(), str.end(), [&set] (char c) { set.emplace(c); });
 }
 
@@ -13,13 +13,13 @@ uint64_t sol1() {
     uint64_t result = 0;
     string line;
     unordered_set<char> answers;
-    while (getline(cin, line) || answers.size()) {
+    while (getline(cin, line) || !answers.empty()) {
         if (line.empty()) {
             result += answers.size();
             answers.clear();
             continue;
         }
-        set_from_string(answers, line);
+        add_to_set(answers, line);
     }
     return result;
 }
@@ -29,7 +29,7 @@ uint64_t sol2() {
     string line;
     unordered_set<char> answers;
     bool first = true;
-    while (getline(cin, line) || answers.size()) {
+    while (getline(cin, line) || !answers.empty()) {
         if (line.empty()) {
             result += answers.size();
             answers.clear();
@@ -37,11 +37,11 @@ uint64_t sol2() {
             continue;
         }
         if (first) {
-            set_from_string(answers, line);
+            add_to_set(answers, line);
             first = false;
         } else {
             unordered_set<char> group, temp;
-            set_from_string(group, line);
+            add_to_set(group, line);
             for_each(answers.begin(), answers.end(),
                 [&temp, &group](char c) {
                     if (group.count(c)) {
