@@ -72,10 +72,49 @@ uint64_t sol1() {
     return result;
 }
 
+uint64_t must_contain(
+    const string& bag_name,
+    const unordered_map<string, unordered_set<string> >& sub_bags,
+    unordered_map<string, uint64_t>& contain) {
+    if (contain.count(bag_name)) {
+        return contain.at(bag_name);
+    }
+    auto bags = sub_bags.at(bag_name);
+    uint64_t result = 0;
+    for (string bag : bags) {
+        uint64_t quantity = stoll(bag.substr(0, 1));
+        string name = bag.substr(2, string::npos);
+        result += quantity * (1 + must_contain(name, sub_bags, contain));
+    }
+    contain.emplace(bag_name, result);
+    return result;
+}
+
 uint64_t sol2() {
-    return 0;
+    string line;
+    unordered_map<string, uint64_t> contain;
+    unordered_map<string, unordered_set<string> > makes;
+    while (getline(cin, line)) {
+        sregex_token_iterator iter(line.begin(), line.end(), contains, -1);
+        string bag = *iter;
+        string bags = *(++iter);
+        string bag_name = split(bag, regex("\\sbag")).front();
+        if (bags == no_others) {
+            contain.emplace(bag_name, 0);
+            continue;
+        }
+        auto quantities = split(bags, regex(",\\s"));
+        unordered_set<string> can_make;
+        for (string q : quantities) {
+            string name = split(q, regex("\\sbag")).front();
+            can_make.emplace(name);
+        }
+        makes.emplace(bag_name, can_make);
+    }
+
+    return must_contain(gold, makes, contain);
 }
 
 int main() {
-    cout << sol1() << endl;
+    cout << sol2() << endl;
 }
