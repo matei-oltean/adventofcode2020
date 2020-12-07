@@ -24,11 +24,9 @@ bool can_form_gold_shiny(
         return false;
     }
     auto bags = sub_bags.at(bag_name);
-    for (string bag : bags) {
-        if (can_form_gold_shiny(bag, sub_bags, can_form)) {
-            can_form.emplace(bag_name, true);
-            return true;
-        }
+    if (any_of(bags.begin(), bags.end(), [&sub_bags, &can_form](const string& bag) { return can_form_gold_shiny(bag, sub_bags, can_form); })) {
+        can_form.emplace(bag_name, true);
+        return true;
     }
     can_form.emplace(bag_name, false);
     return false;
@@ -41,8 +39,7 @@ uint64_t sol1() {
     unordered_map<string, unordered_set<string> > makes;
     while (getline(cin, line)) {
         sregex_token_iterator iter(line.begin(), line.end(), contains, -1);
-        string bag = *iter;
-        string bags = *(++iter);
+        string bag = *iter, bags = *(++iter);
         string bag_name = split(bag, regex("\\sbag")).front();
         // this bag is useless
         if (bags == no_others) {
@@ -82,7 +79,7 @@ uint64_t must_contain(
     auto bags = sub_bags.at(bag_name);
     uint64_t result = 0;
     for (string bag : bags) {
-        uint64_t quantity = stoll(bag.substr(0, 1));
+        int quantity = bag.front() - '0';
         string name = bag.substr(2, string::npos);
         result += quantity * (1 + must_contain(name, sub_bags, contain));
     }
@@ -96,8 +93,7 @@ uint64_t sol2() {
     unordered_map<string, unordered_set<string> > makes;
     while (getline(cin, line)) {
         sregex_token_iterator iter(line.begin(), line.end(), contains, -1);
-        string bag = *iter;
-        string bags = *(++iter);
+        string bag = *iter, bags = *(++iter);
         string bag_name = split(bag, regex("\\sbag")).front();
         if (bags == no_others) {
             contain.emplace(bag_name, 0);
