@@ -48,7 +48,7 @@ uint64_t sol1() {
         }
         auto quantities = split(bags, regex(",\\s"));
         unordered_set<string> can_make;
-        for (auto q : quantities) {
+        for (const auto& q : quantities) {
             auto quantity = split(q, regex("\\d+\\s"));
             string name = split(quantity.front(), regex("\\sbag")).front();
             if (name == gold) {
@@ -61,8 +61,8 @@ uint64_t sol1() {
         makes.emplace(bag_name, can_make);
     }
 
-    for (auto bag_name : makes) {
-        if (can_form_gold_shiny(bag_name.first, makes, can_form)) {
+    for (const auto& [bag_name, bag_set] : makes) {
+        if (can_form_gold_shiny(bag_name, makes, can_form)) {
             result += 1;
         }
     }

@@ -25,8 +25,8 @@ uint64_t sol2() {
     while (getline(cin, line)) {
         auto a = stoull(line);
         if (d.count(2020-a)) {
-            auto res = d.at(2020-a);
-            return a*res.first*res.second;
+            auto& [b, c] = d.at(2020-a);
+            return b*c;
         }
         for (auto k : num) {
             d.emplace(k+a, make_pair(k, a));

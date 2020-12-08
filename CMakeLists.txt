@@ -7,7 +7,7 @@ project("Advent2020")
 # Compiler
 
 set(CMAKE_BUILD_TYPE Debug)
-
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("utils/")

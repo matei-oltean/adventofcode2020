@@ -25,7 +25,7 @@ uint64_t sol1() {
     while (getline(cin, line)) {
         if (line.empty()) {
             if (all_of(mandatory_keys.begin(), mandatory_keys.end(),
-                [&fields](auto key) { return fields.count(key.first); })) {
+                [&fields](const auto& key) { return fields.count(key.first); })) {
                 ++result;
             }
             fields.clear();
@@ -33,7 +33,7 @@ uint64_t sol1() {
         }
         auto key_values = split(line, ' ');
         for_each(key_values.begin(), key_values.end(),
-            [&fields](auto kv) {
+            [&fields](const auto& kv) {
                 auto semi_colon_pos = kv.find_first_of(':');
                 auto key = kv.substr(0, semi_colon_pos);
                 fields.emplace(key);
@@ -50,7 +50,7 @@ uint64_t sol2() {
     while (getline(cin, line)) {
         if (line.empty()) {
             if (all_of(mandatory_keys.begin(), mandatory_keys.end(),
-                [&fields](auto key) { return fields.count(key.first) && regex_match(fields.at(key.first), key.second); })) {
+                [&fields](const auto& key) { return fields.count(key.first) && regex_match(fields.at(key.first), key.second); })) {
                 ++result;
             }
             fields.clear();
@@ -58,7 +58,7 @@ uint64_t sol2() {
         }
         auto key_values = split(line, ' ');
         for_each(key_values.begin(), key_values.end(),
-            [&fields](auto kv) {
+            [&fields](const auto& kv) {
                 auto semi_colon_pos = kv.find_first_of(':');
                 auto key = kv.substr(0, semi_colon_pos);
                 auto value = kv.substr(semi_colon_pos + 1, string::npos);

@@ -35,11 +35,11 @@ uint64_t sol2() {
     }
     while (getline(cin, line)) {
         for (size_t i = 0; i < steps.size(); ++i) {
-            auto xy = steps.at(i);
-            if (depth % xy.first) {
+            auto& [x, y] = steps.at(i);
+            if (depth % x) {
                 continue;
             }
-            if (line.at((xy.second * depth / xy.first) % line.size()) == '#') {
+            if (line.at((y * depth / x) % line.size()) == '#') {
                 ++trees.at(i);
             }
         }
