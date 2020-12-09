@@ -3,6 +3,7 @@
 #include <deque>
 #include <vector>
 #include <unordered_set>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,16 +16,13 @@ uint64_t parse(vector<int>& vec, bool fill = false) {
             vec.push_back(curr);
         }
         if (preamble.size() == 25) {
-            bool found = false;
             unordered_set<int> p;
-            for (int n : preamble) {
+            if (none_of(preamble.begin(), preamble.end(), [&p, &curr](int n) {
                 if (curr - n != n && p.count(curr - n)) {
-                    found = true;
-                    break;
+                    return true;
                 }
                 p.emplace(n);
-            }
-            if (!found) {
+                return false; })) {
                 return curr;
             }
             preamble.pop_front();
