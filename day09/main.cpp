@@ -9,31 +9,27 @@ using namespace std;
 uint64_t parse(vector<int>& vec, bool fill = false) {
     deque<int> preamble;
     string line;
-    int p = 0;
     while (getline(cin, line)) {
         int curr = stoi(line);
         if (fill) {
             vec.push_back(curr);
         }
-        if (p < 25) {
-            preamble.push_back(curr);
-            ++p;
-            continue;
-        }
-        bool found = false;
-        unordered_set<int> p;
-        for (int n : preamble) {
-            if (curr - n != n && p.count(curr - n)) {
-                found = true;
-                break;
+        if (preamble.size() == 25) {
+            bool found = false;
+            unordered_set<int> p;
+            for (int n : preamble) {
+                if (curr - n != n && p.count(curr - n)) {
+                    found = true;
+                    break;
+                }
+                p.emplace(n);
             }
-            p.emplace(n);
-        }
-        if (!found) {
-            return curr;
+            if (!found) {
+                return curr;
+            }
+            preamble.pop_front();
         }
         preamble.push_back(curr);
-        preamble.pop_front();
     }
     return 0;
 }
