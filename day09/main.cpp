@@ -2,6 +2,7 @@
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <unordered_set>
 
 using namespace std;
 
@@ -20,16 +21,13 @@ uint64_t parse(vector<int>& vec, bool fill = false) {
             continue;
         }
         bool found = false;
-        for (size_t i = 0; i < preamble.size(); ++i) {
-            if (found) {
+        unordered_set<int> p;
+        for (int n : preamble) {
+            if (curr - n != n && p.count(curr - n)) {
+                found = true;
                 break;
             }
-            for (size_t j = i + 1; j < preamble.size(); ++j) {
-                if (preamble[i] != preamble[j] && preamble[i] + preamble[j] == curr) {
-                    found = true;
-                    break;
-                }
-            }
+            p.emplace(n);
         }
         if (!found) {
             return curr;
