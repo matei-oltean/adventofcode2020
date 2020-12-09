@@ -48,23 +48,20 @@ uint64_t sol2() {
     int invalid = parse(v, true);
     int i = 0, j = 0;
     int sum = v[i];
-    while (i < v.size() && j < v.size()) {
+    while (sum != invalid) {
         while (sum < invalid) {
             sum += v[++j];
         }
         while (sum > invalid) {
             sum -= v[i++];
         }
-        if (sum == invalid) {
-            int high = v[i], low = v[i];
-            for (; i <= j; ++i) {
-                high = max(high, v[i]);
-                low = min(low, v[i]);
-            }
-            return high + low;
-        }
     }
-    return 0;
+    int high = v[i], low = v[i];
+    for (; i <= j; ++i) {
+        high = max(high, v[i]);
+        low = min(low, v[i]);
+    }
+    return high + low;
 }
 
 int main() {
