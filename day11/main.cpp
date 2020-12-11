@@ -6,24 +6,20 @@
 
 using namespace std;
 
-int convert(char c) {
-    return c == '#' ? 1 : 0;
+inline int convert(char c) {
+    return c == '#';
 }
 
-vector<vector<char> > parse() {
+vector<string> parse() {
     string line;
-    vector<vector<char> > game;
+    vector<string> game;
     while (getline(cin, line)) {
-        vector<char> v;
-        for (char c : line) {
-            v.push_back(c);
-        }
-        game.push_back(v);
+        game.push_back(line);
     }
     return game;
 }
 
-int living_neighbours(const vector<vector<char> >& game, int i, int j) {
+int living_neighbours(const vector<string>& game, int i, int j) {
     auto res = -convert(game[i][j]);
     for (size_t ii = max(i - 1, 0); ii < min(i + 2, int(game.size())); ++ii) {
         for (size_t jj = max(j - 1, 0); jj < min(j + 2, int(game[i].size())); ++jj) {
@@ -33,8 +29,8 @@ int living_neighbours(const vector<vector<char> >& game, int i, int j) {
     return res;
 }
 
-int seen_neighbours(const vector<vector<char> >& game, int i, int j) {
-    auto res = -convert(game[i][j]);;
+int seen_neighbours(const vector<string>& game, int i, int j) {
+    auto res = -convert(game[i][j]);
     vector<pair<int, int> > directions;
     for (int k = -1; k < 2; ++k) {
         for (int kk = -1; kk < 2; ++kk) {
@@ -55,47 +51,40 @@ int seen_neighbours(const vector<vector<char> >& game, int i, int j) {
     return res;
 }
 
-void run(vector<vector<char> >& game, int threshold, function<int(const vector<vector<char> >& game, int i, int j)> neighbours) {
+void run(vector<string>& game, int threshold, function<int(const vector<string>& game, int i, int j)> neighbours) {
     bool changed = true;
     while (changed) {
-        vector<vector<char> > temp;
+        vector<string> temp;
         changed = false;
         for (size_t i = 0; i < game.size(); ++i) {
-            vector<char> v;
+            string s = game[i];
             for (size_t j = 0; j < game[i].size(); ++j) {
                 auto state = game[i][j];
                 if (state == '.') {
-                    v.push_back('.');
                     continue;
                 }
                 auto living = neighbours(game, i, j);
                 if (state == 'L') {
                     if (living == 0) {
-                        v.push_back('#');
+                        s[j] = '#';
                         changed = true;
-                    } else {
-                        v.push_back('L');
                     }
                 } else {
                     if (living >= threshold) {
-                        v.push_back('L');
+                        s[j] = 'L';
                         changed = true;
-                    } else {
-                        v.push_back('#');
                     }
                 }
             }
-            temp.push_back(v);
+            temp.push_back(s);
         }
         game = temp;
     }
 }
 
-uint64_t sol1() {
-    auto v = parse();
-    run(v, 4, living_neighbours);
+uint64_t count_occupied(const vector<string>& seats) {
     int res = 0;
-    for (auto row : v) {
+    for (auto row : seats) {
         for (auto seat : row) {
             res += convert(seat);
         }
@@ -103,16 +92,16 @@ uint64_t sol1() {
     return res;
 }
 
+uint64_t sol1() {
+    auto v = parse();
+    run(v, 4, living_neighbours);
+    return count_occupied(v);
+}
+
 uint64_t sol2() {
     auto v = parse();
     run(v, 5, seen_neighbours);
-    int res = 0;
-    for (auto row : v) {
-        for (auto seat : row) {
-            res += convert(seat);
-        }
-    }
-    return res;
+    return count_occupied(v);
 }
 
 int main() {
