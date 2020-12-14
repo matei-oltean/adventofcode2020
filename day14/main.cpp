@@ -6,6 +6,14 @@
 
 using namespace std;
 
+inline uint64_t count_bits(const unordered_map<uint64_t, uint64_t>& memory) {
+    uint64_t res = 0;
+    for (auto v : memory) {
+        res += v.second;
+    }
+    return res;
+}
+
 uint64_t sol1() {
     string line;
     unordered_map<uint64_t, uint64_t> memory;
@@ -29,11 +37,7 @@ uint64_t sol1() {
             memory[mem] = stoull(num_bis, nullptr, 2);
         }
     }
-    uint64_t res = 0;
-    for (auto v : memory) {
-        res += v.second;
-    }
-    return res;
+    return count_bits(memory);
 }
 
 uint64_t sol2() {
@@ -80,11 +84,7 @@ uint64_t sol2() {
             }
         }
     }
-    uint64_t res = 0;
-    for (auto v : memory) {
-        res += v.second;
-    }
-    return res;
+    return count_bits(memory);
 }
 
 int main() {
