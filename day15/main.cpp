@@ -2,32 +2,26 @@
 #include <iostream>
 #include <utils.h>
 #include <unordered_map>
-#include <regex>
 
 using namespace std;
 
-pair<int, unordered_map<int, pair<int, int> > > parse() {
-    unordered_map<int, pair<int, int> > res;
+pair<int, unordered_map<int,int> > parse() {
+    unordered_map<int, int> res;
     string line;
     getline(cin, line);
     auto parsed = split(line, ',');
-    for (size_t i = 0; i < parsed.size(); ++i) {
-        res[stoi(parsed[i])] = make_pair(i, i);
+    for (size_t i = 0; i < parsed.size() - 1; ++i) {
+        res[stoi(parsed[i])] = i;
     }
     return make_pair(stoi(parsed.back()), res);
 }
 
 int n_nth_number(int n) {
     auto [last, memory] = parse();
-    for (size_t i = memory.size(); i < n; ++i) {
-        auto& [f, l] = memory[last];
-        last = l - f;
-        if (memory.count(last)) {
-            auto [ff, ll] = memory[last];
-            memory[last] = make_pair(ll, i);
-        } else {
-            memory[last] = make_pair(i, i);
-        }
+    for (size_t i = memory.size(); i < n - 1; ++i) {
+        int new_last = memory.count(last) ? i - memory[last] : 0;
+        memory[last] = i;
+        last = new_last;
     }
     return last;
 }
