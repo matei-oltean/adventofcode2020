@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include <regex>
-
+#include <chrono>
+#include <functional>
 
 std::vector<std::string> split(const std::string& str, const char sep) {
     std::vector<std::string> buf;
@@ -27,4 +28,16 @@ std::vector<std::string> split(const std::string& str, const std::regex& sep) {
         }
     }
     return buf;
+}
+
+/*
+    Usage:
+    run_and_time([]{ cout << sol2() << endl; });
+*/
+void run_and_time(const std::function<void()>& lambda) {
+    auto m_StartTime = std::chrono::system_clock::now();
+    lambda();
+    auto m_EndTime = std::chrono::system_clock::now();
+    std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(m_EndTime - m_StartTime).count() << std::endl;
+
 }
