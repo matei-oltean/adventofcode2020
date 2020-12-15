@@ -36,3 +36,5 @@ builds/*
 
 # VSCode settings
 .vscode/settings.json
+
+*/test
