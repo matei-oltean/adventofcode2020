@@ -1,25 +1,25 @@
 #include <string>
 #include <iostream>
 #include <utils.h>
-#include <unordered_map>
+#include <vector>
 
 using namespace std;
 
-pair<int, unordered_map<int,int> > parse() {
-    unordered_map<int, int> res;
+pair<int, int> parse(vector<int>& memory) {
     string line;
     getline(cin, line);
-    auto parsed = split(line, ',');
+    const auto parsed = split(line, ',');
     for (size_t i = 0; i < parsed.size() - 1; ++i) {
-        res[stoi(parsed[i])] = i;
+        memory[stoi(parsed[i])] = i;
     }
-    return make_pair(stoi(parsed.back()), res);
+    return make_pair(stoi(parsed.back()), parsed.size() - 1);
 }
 
-int n_nth_number(int n) {
-    auto [last, memory] = parse();
-    for (size_t i = memory.size(); i < n - 1; ++i) {
-        int new_last = memory.count(last) ? i - memory[last] : 0;
+int n_nth_number(size_t n) {
+    vector<int> memory(n, -1);
+    auto [last, initial_size] = parse(memory);
+    for (size_t i = initial_size; i < n - 1; ++i) {
+        const int new_last = memory[last] == -1 ? 0 : i - memory[last];
         memory[last] = i;
         last = new_last;
     }
