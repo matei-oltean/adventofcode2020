@@ -16,19 +16,17 @@ uint64_t sol1() {
     while (getline(cin, line)) {
         if (line.empty()) {
             f = false;
+            getline(cin, line);
             continue;
         }
         if (f) {
             const auto num = split(split(line, regex(":\\s")).back(), regex("\\sor\\s"));
             for (const string& s : num) {
-                auto bound = split(s, '-');
+                const auto bound = split(s, '-');
                 for (int i = stoi(bound.front()); i <= stoi(bound.back()); ++i) {
                     valid.emplace(i);
                 }
             }
-            continue;
-        }
-        if (line[0] == 'y' || line[0] == 'n') {
             continue;
         }
         const auto fields = split(line, ',');
@@ -36,7 +34,6 @@ uint64_t sol1() {
             if (!valid.count(stoi(field))) {
                 res += stoi(field);
             }
-
         }
     }
     return res;
@@ -53,6 +50,7 @@ uint64_t sol2() {
     while (getline(cin, line)) {
         if (line.empty()) {
             ++step;
+            getline(cin, line);
             continue;
         }
         if (step == 0) {
@@ -61,7 +59,7 @@ uint64_t sol2() {
             unordered_set<int> this_map;
             const auto num = split(spl.back(), regex("\\sor\\s"));
             for (const string& s : num) {
-                auto bound = split(s, '-');
+                const auto bound = split(s, '-');
                 for (int i = stoi(bound.front()); i <= stoi(bound.back()); ++i) {
                     valid.emplace(i);
                     this_map.emplace(i);
@@ -70,16 +68,10 @@ uint64_t sol2() {
             possible.emplace(name, this_map);
             continue;
         } else if (step == 1) {
-            if (line[0] == 'y') {
-                continue;
-            }
             const auto fields = split(line, ',');
             for (const string& field : fields) {
                 my_ticket.emplace_back(stoi(field));
             }
-            continue;
-        }
-        if (line[0] == 'n') {
             continue;
         }
         const auto fields = split(line, ',');
@@ -123,12 +115,13 @@ uint64_t sol2() {
             }
             pos = kv.first;
             key = *(kv.second.begin());
-            if (key.rfind("departure", 0) == 0) {
-                res *= my_ticket[kv.first];
-                found += 1;
-                if (found == 6) {
-                    return res;
-                }
+            break;
+        }
+        if (key.rfind("departure", 0) == 0) {
+            res *= my_ticket[pos];
+            found += 1;
+            if (found == 6) {
+                return res;
             }
         }
         mapping.erase(pos);
