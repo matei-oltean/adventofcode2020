@@ -72,38 +72,22 @@ void run(set<point4d>& active, size_t iterations) {
     }
 }
 
-uint64_t sol1() {
+int main() {
     string line;
     int x = 0;
     set<point> active;
+    set<point4d> active4d;
     while(getline(cin, line)) {
         for (int j = 0; j < line.size(); ++j) {
             if (line[j] == '#') {
                 active.emplace(x, j, 0);
+                active4d.emplace(x, j, 0, 0);
             }
         }
         ++x;
     }
     run(active, 6);
-    return active.size();
-}
-
-uint64_t sol2() {
-    string line;
-    int x = 0;
-    set<point4d> active;
-    while(getline(cin, line)) {
-        for (int j = 0; j < line.size(); ++j) {
-            if (line[j] == '#') {
-                active.emplace(x, j, 0, 0);
-            }
-        }
-        ++x;
-    }
-    run(active, 6);
-    return active.size();
-}
-
-int main() {
-    cout << sol2() << endl;
+    run(active4d, 6);
+    cout << active.size() << endl;
+    cout << active4d.size() << endl;
 }
