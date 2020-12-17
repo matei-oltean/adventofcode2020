@@ -28,7 +28,7 @@ void run(set<point>& active, size_t iterations) {
         for (const auto& x : neighbours) {
             for (const auto& y : x.second) {
                 for (const auto& z : y.second) {
-                    const point p = make_tuple(x.first, y.first, z.first);
+                    const point p(x.first, y.first, z.first);
                     if (z.second == 3 || (z.second == 2 && active.count(p))) {
                         new_active.emplace(p);
                     }
@@ -60,7 +60,7 @@ void run(set<point4d>& active, size_t iterations) {
             for (const auto& y : x.second) {
                 for (const auto& z : y.second) {
                     for (const auto& cube : z.second) {
-                        const point4d p = make_tuple(x.first, y.first, z.first, cube.first);
+                        const point4d p(x.first, y.first, z.first, cube.first);
                         if (cube.second == 3 || (cube.second == 2 && active.count(p))) {
                             new_active.emplace(p);
                         }
