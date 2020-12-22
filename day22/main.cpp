@@ -10,7 +10,7 @@ string dtos(const deque<int>& d) {
     for (const auto i : d) {
         res += i + ',';
     }
-    return res;
+    return res.substr(0, res.size() - 1);
 }
 
 pair<deque<int>, deque<int> > parse() {
@@ -60,7 +60,7 @@ uint64_t sol1() {
     return get_score(player1.empty() ? player2 : player1);
 }
 
-pair<bool, uint64_t> sub_game(deque<int>& player1, deque<int>& player2) {
+bool sub_game(deque<int>& player1, deque<int>& player2) {
     bool first_has_won = false;
     unordered_set<string> seen1, seen2;
     while (!player1.empty() && !player2.empty()) {
@@ -90,19 +90,18 @@ pair<bool, uint64_t> sub_game(deque<int>& player1, deque<int>& player2) {
                     break;
                 }
             }
-            one_won = sub_game(new_p1, new_p2).first;
+            one_won = sub_game(new_p1, new_p2);
         }
         deque<int>& winning = one_won ? player1 : player2;
         winning.push_back(one_won ? p1 : p2);
         winning.push_back(one_won ? p2 : p1);
     }
-    first_has_won |= player2.empty();
-    return { first_has_won, get_score(first_has_won ? player1 : player2) };
+    return first_has_won || player2.empty();
 }
 
 uint64_t sol2() {
     auto [player1, player2] = parse();
-    return sub_game(player1, player2).second;
+    return get_score(sub_game(player1, player2) ? player1 : player2);
 }
 
 int main() {
