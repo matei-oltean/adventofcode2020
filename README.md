@@ -31,4 +31,4 @@ make
 
 Then run the executable that you need:
 
-`cat ..\dayxx\input | .\dayxx\dayxx` or `./dayxx/dayxx < ../dayxx/input`
+`cat ../dayxx/input | ./dayxx/dayxx` or `./dayxx/dayxx < ../dayxx/input`
